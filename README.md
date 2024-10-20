@@ -16,7 +16,7 @@ Always Active:
 |---------------------|-----------------------------------------------------|
 | Window + Ctrl + r | Reopen setup window to input new data
 Windows + Ctrl + v         | Connect/disconnect to SCU VPN                       |
-| Windows + Ctrl + Shift + v | Connect to SSH/Maximize window if already connected |
+| Windows + Ctrl + Alt + v | Connect to SSH/Maximize window if already connected |
 
 Only active in SSH:
 | Hotkey         | Action                                |
@@ -29,3 +29,5 @@ Only active in SSH:
 | Ctrl + f       | Fetch and pull                        |
 | Ctrl + t       | Open a tar window                     |
 | Ctrl + i       | Open a git initialization window      |
+Ctrl + r | Make git store details next time you input
+Ctrl + Alt + r | Type stored username and password

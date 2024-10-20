@@ -52,11 +52,11 @@ global ahkName := SubStr(A_ScriptName, 1, -4)
 global mem := ahkName . ".ini"
 global email, portal, git, token, link
 if FileExist(mem) {
-    email := IniRead(mem, "Info", "email")
-    portal := IniRead(mem, "Info", "portal")
-    git := IniRead(mem, "Info", "git")
-    token := IniRead(mem, "Info", "token")
-	link := IniRead(mem, "Info", "link")
+    email := IniRead(mem, "Info", "email", "")
+    portal := IniRead(mem, "Info", "portal", "")
+    git := IniRead(mem, "Info", "git", "")
+    token := IniRead(mem, "Info", "token", "")
+	link := IniRead(mem, "Info", "link", "")
 } else {
     Setup()
 }
@@ -83,7 +83,7 @@ Connect(show := true) {
 #^v:: {
 	Connect()
 }
-#^+v:: {
+#^!v:: {
 	choice := MsgBox("Is VPN connected / are you on SCU wifi?", "VPN", 0x4)
 	if (choice == "No") {
 		Connect(false)
@@ -132,10 +132,6 @@ global input
 		Commit(GuiCtrlObj)
 		Sleep(100)
 		Send('git push`n')
-		Sleep(500)
-		SendText(git "`n")
-		Sleep(500)
-		SendText(token "`n")
 	}
 	^f:: {
 		Send('git fetch`n')
@@ -167,14 +163,32 @@ global input
 		GuiCtrlObj.Gui.Destroy()
 		global input := false
 	}
+	Clone(GuiCtrlObj, *) {
+		submmited := GuiCtrlObj.Gui.Submit()
+		SendText('git clone "https://github.com/' git '/' submmited.Name '.git"`n')
+		Sleep(500)
+		SendText('cd ' submmited.Name '`n')
+		GuiCtrlObj.Gui.Destroy()
+		global input := false
+	}
 	^i:: {
 		global input := Gui(, "Project details")
 		input.OnEvent("Close", DestroyInput)
 		input.OnEvent("Escape", DestroyInput)
 		input.SetFont("s10 w300")
 		input.AddEdit("r1 w250 vName WantReturn", "Github name")
-		input.AddButton("w250 +Default", "Initialize").OnEvent("Click", Init)
+		input.AddButton("w120", "Initialize").OnEvent("Click", Init)
+		input.AddButton("yp w120 +Default", "Clone").OnEvent("Click", Clone)
 		input.Show("Center AutoSize")
+	}
+	^r:: {
+		SendText("git config --global credential.helper store`n")
+		SilentPopUp("Git will store your details next time, use control alt r")
+	}
+	^!r:: {
+		SendText(git "`n")
+		Sleep(500)
+		SendText(token "`n")
 	}
 #HotIf IsSet(email) && IsSet(link) && link && WinActive(email "@linux ahk_exe cmd.exe")
 	^p:: {
