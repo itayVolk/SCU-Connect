@@ -140,7 +140,7 @@ global input
 	}
 	Tar(GuiCtrlObj, *) {
 		submmited := GuiCtrlObj.Gui.Submit()
-		SendText("tar --exclude='`.`/`.git' --exclude '`.`/*`.tar' -cvzf " submmited.Name "`.tar .`n")
+		SendText("tar --exclude='`.`/`.*' --exclude '`.`/*`.tar' -cvzf " submmited.Name "`.tar .`n")
 		GuiCtrlObj.Gui.Destroy()
 		global input := false
 	}
